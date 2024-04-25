@@ -34,8 +34,9 @@ public class GTFOBlockCasing extends VariantBlock<GTFOBlockCasing.CasingType> {
     public enum CasingType implements IStringSerializable {
 
         ADOBE_BRICKS("adobe_bricks"),
-        REINFORCED_ADOBE_BRICKS("reinforced_adobe_bricks");
-
+        REINFORCED_ADOBE_BRICKS("reinforced_adobe_bricks"),
+        PORCELAIN_TILE("porcelain_tile"),
+        DARK_PORCELAIN_TILE("dark_porcelain_tile");
 
         private final String name;
 

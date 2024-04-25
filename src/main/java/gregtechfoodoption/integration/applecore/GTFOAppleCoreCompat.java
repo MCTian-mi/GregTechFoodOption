@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import squeek.applecore.api.food.FoodEvent;
 import squeek.applecore.api.food.FoodValues;
+import squeek.applecore.api.food.IEdible;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class GTFOAppleCoreCompat {
                 return sparedItemsFoodValues.get(sparedFood);
             return originalValues;
         }
-        if (GTFOConfig.gtfoAppleCoreConfig.reduceForeignFoodStats) {
+        if (GTFOConfig.gtfoOtherFoodModConfig.reduceForeignFoodStats) {
             ItemStack actualFood = food;
 
             float modifier = this.getFoodModifier(player, actualFood);
@@ -64,10 +65,10 @@ public class GTFOAppleCoreCompat {
     }
 
     private float getForeignFoodDivisor(EntityPlayer player) {
-        if (GTFOConfig.gtfoAppleCoreConfig.useDefaultForeignFoodStatsReduction) {
+        if (GTFOConfig.gtfoOtherFoodModConfig.useDefaultForeignFoodStatsReduction) {
             return clientDivisorsMap.get(player.getUniqueID());
         } else
-            return GTFOConfig.gtfoAppleCoreConfig.constantFoodStatsDivisor;
+            return GTFOConfig.gtfoOtherFoodModConfig.constantFoodStatsDivisor;
     }
 
     public static float advancementLookup(EntityPlayer player) {
@@ -103,12 +104,16 @@ public class GTFOAppleCoreCompat {
     @ZenMethod
     public static void addToSparedItems(Item item, int hunger, float saturation) {
         sparedItems.add(item);
-        if (GTFOConfig.gtfoAppleCoreConfig.appleCoreCompat)
+        if (GTFOConfig.gtfoOtherFoodModConfig.appleCoreCompat)
             sparedItemsFoodValues.put(item, new FoodValues(hunger, saturation));
     }
 
     @Optional.Method(modid = GTFOValues.MODID_AP)
     public static void sendEatenEvent(EntityPlayer player, ItemStack itemStack, int hunger, float sat) {
         MinecraftForge.EVENT_BUS.post(new FoodEvent.FoodEaten(player, itemStack, new FoodValues(hunger, sat), hunger, sat));
+    }
+
+    public static boolean isAppleCoreEdible(ItemStack stack) {
+        return stack.getItem() instanceof IEdible;
     }
 }
